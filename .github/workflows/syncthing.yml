@@ -1,0 +1,27 @@
+name: Sync Specific Folder
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs at 00:00 UTC every day
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  sync-folder:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Clone specific folder from external repository
+      run: |
+        git clone https://github.com/Poeschl/Hassio-Addons.git --depth 1
+        cp -r Hassio-Addons/syncthing ./syncthing # Adjust the target path as needed
+        rm -rf Hassio-Addons # Clean up
+
+    - name: Commit and push if there are changes
+      run: |
+        git config --global user.email "gjermundwiggen@gmail.com"
+        git config --global user.name "GitHub Actions"
+        git add .
+        git commit -m "Updated specific folder from external repository" -a || echo "No changes to commit"
+        git push
