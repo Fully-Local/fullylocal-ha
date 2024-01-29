@@ -24,4 +24,4 @@ jobs:
         git config --global user.name "GitHub Actions"
         git add .
         git commit -m "Updated specific folder from external repository" -a || echo "No changes to commit"
-        git push
+        git push --set-upstream https://${{ secrets.GITHUBACTIONS }}@github.com/Fully-Local/fullylocal-ha.git main
